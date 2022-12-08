@@ -17,7 +17,7 @@ const getHeight = ({ x, y }: { x: number, y: number }) => {
 
 const checkVisible = ({ x, y }: { x: number, y: number }) => {
   let visible = false;
-  
+
   if (x == 0) visible = true;
   if (y == 0) visible = true;
   if (x == rows - 1) visible = true;
@@ -29,31 +29,52 @@ const checkVisible = ({ x, y }: { x: number, y: number }) => {
   // check if the tree is hidden in all directions.. must be hidden in all 4.
   // to left
   const hiddenToWest = () => {
-    for (let col = x; col > 0; col--) if (getHeight({ x: col, y }) > treeHeight) return true; // if a tree is higher we are hidden
+
+    for (let col = x - 1; col >= 0; col--) {
+      const checktree = getHeight({ x: col, y })
+      if (checktree >= treeHeight) return true; // if a tree is higher we are hidden
+    }
     return false; // asssume we are visible
   }
 
   // to right
   const hiddenToEast = () => {
-    for (let col = x; col < cols; col++) if (getHeight({ x: col, y }) > treeHeight) return true;
+
+    for (let col = x + 1; col < cols; col++) {
+      const checktree = getHeight({ x: col, y })
+      if (checktree >= treeHeight) return true;
+
+    }
     return false
   }
 
   // to top
   const hiddenToNorth = () => {
-    for (let row = y; row > 0; row--) if (getHeight({ x, y: row }) > treeHeight) return true;
+
+    for (let row = y - 1; row >= 0; row--) {
+      const checktree = getHeight({ x, y: row });
+      if (checktree >= treeHeight) return true;
+    }
     return false;
   }
 
   // to bottom
   const hiddenToSouth = () => {
-    for (let row = y; row < rows; row++) if (getHeight({ x, y: row }) > treeHeight) return true;
+    for (let row = y + 1; row < rows; row++) {
+      const checktree = getHeight({ x, y: row });
+      if (checktree >= treeHeight) return true;
+    }
     return false;
   }
 
   // const directions = [!hiddenToWest(), !hiddenToEast(), !hiddenToNorth(), !hiddenToSouth()];
 
-  
+
+  if (!hiddenToWest()) visible = true;
+  if (!hiddenToEast()) visible = true;
+  if (!hiddenToNorth()) visible = true;
+  if (!hiddenToSouth()) visible = true;
+
 
   // if (!visibleDirections) visible = true;
 
@@ -62,10 +83,10 @@ const checkVisible = ({ x, y }: { x: number, y: number }) => {
     treeHeight,
     visible,
     visibleDirections: {
-      north: !hiddenToNorth(),
-      east: !hiddenToEast(),
-      south: !hiddenToSouth(),
-      west: !hiddenToWest(),
+      north: hiddenToNorth(),
+      east: hiddenToEast(),
+      south: hiddenToSouth(),
+      west: hiddenToWest(),
     }
   };
 }
@@ -93,10 +114,10 @@ const checkForest = () => {
     }
     datamap.push(rowMap);
   }
-  console.log(count);
+  return count;
 }
 
-checkForest();
+const answer = checkForest();
 
 // console.log(datamap);
 
@@ -114,7 +135,7 @@ const plot = (map: CheckData[][]) => <K extends keyof CheckData>(
     prop: K,
     render: (val: CheckData[K]) => string
   }) => {
-    console.log(`\n Plotting property: ${prop}`)
+  console.log(`\n Plotting property: ${prop}`)
   for (let row = 0; row < rows; row++) {
     let outputstring = ""
     for (let col = 0; col < cols; col++) {
@@ -161,3 +182,6 @@ plot(datamap)({
   prop: "visibleDirections",
   render: (dir) => dir.south ? 'S' : '·'
 });
+
+console.log("\n\n\n")
+console.log(`Answer is ${answer}\n`)
