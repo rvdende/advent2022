@@ -1,5 +1,6 @@
 console.log(new Date())
-const data = await Deno.readTextFile("./sample.txt");
+// const data = await Deno.readTextFile("./sample.txt");
+const data = await Deno.readTextFile("./part1.txt");
 
 type Plantation = number[][];
 
