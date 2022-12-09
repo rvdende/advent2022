@@ -1,6 +1,6 @@
 console.log(new Date())
-// const data = await Deno.readTextFile("./sample.txt");
-const data = await Deno.readTextFile("./part1.txt");
+const data = await Deno.readTextFile("./sample.txt");
+// const data = await Deno.readTextFile("./part1.txt");
 
 type Plantation = number[][];
 
@@ -146,6 +146,13 @@ const plot = (map: CheckData[][]) => <K extends keyof CheckData>(
     console.log(outputstring);
   }
 }
+
+// shorter version
+// const pluck = <T, K extends keyof T, R extends (val: T[K]) => void>(key:K, obj:T, render: R) => {
+//   return render(obj[key]);
+// }
+
+// pluck("treeHeight", datamap[0][0], (height) => {})
 
 // Tree height map
 plot(datamap)({
