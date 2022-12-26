@@ -1,4 +1,4 @@
-console.log("day4 part2");
+console.log("day4 part1");
 
 const filename = Deno.args[0] ?? "sample.txt";
 console.log(`Using file: ${filename}`);
@@ -66,7 +66,7 @@ function plotYard(yard: typeof yardOutput) {
 console.log("----");
 plotYard(yardOutput);
 
-function moveCrates(
+function moveCrate(
   yard: typeof yardOutput,
   move: typeof moves[0],
   verbose = false
@@ -75,16 +75,12 @@ function moveCrates(
   const toStack = yard.stacks.find((stack) => stack.stackId === move.to);
 
   if (fromStack && toStack) {
-    let crates = [];
-
-    for (let i = 0; i < move.move; i++) {
-      crates.push(fromStack.crates.pop());
-    }
-    crates = crates.reverse();
-
-    toStack.crates = toStack.crates.concat(crates);
-    if (verbose) {
-      console.log(`Moved ${crates} from ${move.from} to ${move.to}`);
+    const crate = fromStack.crates.pop();
+    if (crate) {
+      toStack.crates.push(crate);
+      if (verbose) {
+        console.log(`Moved ${crate} from ${move.from} to ${move.to}`);
+      }
     }
   }
 }
@@ -93,9 +89,9 @@ moves.forEach((move) => {
   console.log("===== MOVE ====");
   console.log(move);
 
-  // for (let i = 0; i < move.move; i++) {
-  moveCrates(yardOutput, move, true);
-  // }
+  for (let i = 0; i < move.move; i++) {
+    moveCrate(yardOutput, move, true);
+  }
 });
 
 console.log("-----");
