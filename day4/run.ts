@@ -37,4 +37,25 @@ data.forEach((i) => {
   if (result) count++;
 });
 
-console.log(`Answer is: ${count}`);
+console.log(`Fully contained answer is: ${count}`);
+
+// PART 2
+
+function partiallyContain(pair: typeof data[number]) {
+  const [a, b] = pair.elves;
+  console.log(`Checking`);
+  console.log(a);
+  console.log(b);
+
+  if (a.from >= b.from && a.from <= b.to) return true;
+  if (b.from >= a.from && b.from <= a.to) return true;
+  return false;
+}
+
+let countPart2 = 0;
+data.forEach((i) => {
+  const result = partiallyContain(i);
+  if (result) countPart2++;
+});
+
+console.log(`Partially contained answer si ${countPart2}`);
