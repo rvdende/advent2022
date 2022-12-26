@@ -1,16 +1,16 @@
 const sample = [
-  { data: "mjqjpqmgbljsphdztnvjfqwrcgsmlb", marker: 7 },
-  { data: "bvwbjplbgvbhsrlpgdmjqwftvncz", marker: 5 },
-  { data: "nppdvjthqldpwncqszvftbrmjlhg", marker: 6 },
-  { data: "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", marker: 10 },
-  { data: "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", marker: 11 },
+  { data: "mjqjpqmgbljsphdztnvjfqwrcgsmlb", marker: 7, messageStart: 19 },
+  { data: "bvwbjplbgvbhsrlpgdmjqwftvncz", marker: 5, messageStart: 23 },
+  { data: "nppdvjthqldpwncqszvftbrmjlhg", marker: 6, messageStart: 23 },
+  { data: "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", marker: 10, messageStart: 29 },
+  { data: "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", marker: 11, messageStart: 26 },
 ];
 
-function findStartOfPacket(data: string) {
+function findUniqueSequence(data: string, lengthOfSeq: number) {
   let firstId = -1;
   data.split("").forEach((char, index) => {
-    if (index > data.length - 4) return;
-    const chars = data.slice(index, index + 4).split("");
+    if (index > data.length - lengthOfSeq) return;
+    const chars = data.slice(index, index + lengthOfSeq).split("");
     // console.log(chars);
 
     // check if each char is different in chars
@@ -25,15 +25,28 @@ function findStartOfPacket(data: string) {
     // console.log(isUnique);
     if (isUnique && firstId === -1) firstId = index;
   });
-  return firstId + 4;
+  return firstId + lengthOfSeq;
 }
 
 sample.forEach((s) => {
-  console.log(`${findStartOfPacket(s.data)} should be ${s.marker}`);
+  console.log(`${findUniqueSequence(s.data, 4)} should be ${s.marker}`);
 });
 
+console.log("-------------");
 // part1
 
 const dataload = Deno.readTextFileSync("part1data.txt").toString();
-console.log(dataload);
-console.log(findStartOfPacket(dataload));
+console.log(`Start of packet: ${findUniqueSequence(dataload, 4)}`);
+
+// part2
+console.log("-------------");
+
+sample.forEach((s) => {
+  console.log(
+    `${findUniqueSequence(s.data, 14)} start of message should be ${
+      s.messageStart
+    }`
+  );
+});
+
+console.log(`Start of message: ${findUniqueSequence(dataload, 14)}`);
